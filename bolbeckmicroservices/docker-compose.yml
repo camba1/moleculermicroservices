@@ -39,6 +39,38 @@ services:
     networks:
       - internal
 
+  greeterReplica:
+    build:
+      context: .
+    image: bolbeckmicroservices
+    container_name: bolbeckmicroservices-greeter-replica
+    env_file: docker-compose.env
+    environment:
+      SERVICES: greeter
+    labels:
+      - "traefik.enable=false"
+    depends_on:
+      - nats
+      - redis
+    networks:
+      - internal
+
+  helperService:
+    build:
+      context: .
+    image: bolbeckmicroservices
+    container_name: bolbeckmicroservices-helper
+    env_file: docker-compose.env
+    environment:
+      SERVICES: helper
+    labels:
+      - "traefik.enable=false"
+    depends_on:
+      - nats
+      - redis
+    networks:
+      - internal
+
   nats:
     image: nats
     labels:

@@ -13,7 +13,7 @@ module.exports = {
 	/**
 	 * Service dependencies
 	 */
-	dependencies: [],	
+	dependencies: [],
 
 	/**
 	 * Actions
@@ -25,8 +25,11 @@ module.exports = {
 		 *
 		 * @returns
 		 */
-		hello() {
-			return "Hello Moleculer";
+		async hello(ctx) {
+			const payload = `Hello from the greeter at ${this.broker.nodeID}`
+			const num = await ctx.call("helper.random")
+			ctx.emit("hello_called", { payload, num })
+			return { payload, num };
 		},
 
 		/**
