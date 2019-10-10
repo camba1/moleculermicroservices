@@ -11,3 +11,30 @@ services:
       - "8000:8000"
       - "5858:5858"
       - "3000:3000"
+  traefik:
+    # The official v2.0 Traefik docker image
+    image: traefik
+    # Enables the web UI and tells Traefik to listen to docker
+    command: --api.insecure=true --providers.docker
+    ports:
+      # The HTTP port
+      - "80:80"
+      # The Web UI (enabled by --api.insecure=true)
+      - "8080:8080"
+    volumes:
+      # So that Traefik can listen to the Docker events
+      - /var/run/docker.sock:/var/run/docker.sock
+  nats:
+    image: nats
+    labels:
+      - "traefik.enable=false"
+    ports:
+      - "4222:4222"
+      - "8222:8222"
+      - "6222:6222"
+  redis:
+    image: redis
+    labels:
+      - "traefik.enable=false"
+    ports:
+      - "6379:6379"
